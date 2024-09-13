@@ -1,0 +1,33 @@
+<launch>
+
+  <node pkg="topic_tools" type="relay_field"
+        name="field_relayer"
+        args="/visualization_marker /spencer/perception_internal/detected_persons/laser_detector_front spencer_tracking_msgs/DetectedPersons
+            '{header:
+                {seq: 1,
+                stamp: {secs: 1, nsecs: 0},
+                frame_id: m.header.frame_id},
+            detections:
+                [detection_id: m.people..id,
+                pose:
+                    {pose:
+                        {position: 
+                            {x: m.people..pose.position.x,
+                            y: m.people..pose.position.y,
+                            z: m.people..pose.position.z},
+                        orientation:
+                            {x: m.people..pose.orientation.x,
+                            y: m.people..pose.orientation.y,
+                            z: m.people..pose.orientation.z,
+                            w: m.people..pose.orientation.w},
+                        }
+                    }    
+                ]
+            }'
+            --wait-for-start "/>
+  
+  <!-- <node pkg="rostopic" type="rostopic"
+        name="echo"
+        args="echo /repeat" 
+        output="screen"/> -->
+</launch>

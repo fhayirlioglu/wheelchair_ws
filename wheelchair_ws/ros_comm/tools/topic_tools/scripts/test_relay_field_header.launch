@@ -1,0 +1,17 @@
+<launch>
+  <node pkg="rostopic"     name="pub"                type="rostopic"
+          args="pub -r 5 /source std_msgs/Header -- 'frame_id: hello_world' " />
+
+  <node pkg="topic_tools" type="relay_field"
+        name="field_relayer"
+        args="/source /repeat std_msgs/Header
+            '{seq: 0,
+              stamp: {
+                secs: 1,
+                nsecs: 0},
+             frame_id: hello}' 
+            --wait-for-start "/>
+
+  <!-- <node pkg="rostopic"     name="echo"                type="rostopic"
+          args="echo /repeat"        output="screen"/> -->
+</launch>

@@ -1,0 +1,34 @@
+<launch>
+
+    <!-- Arguments-->
+    <arg name="open_rviz" default="true" />
+    <arg name="map_file" default="$(find wheelchair)/maps/map_1/map.yaml" />
+    <arg name="set_base_frame" default="base_link" />
+    <arg name="set_odom_frame" default="odom" />
+    <arg name="set_map_frame" default="map" />
+    <arg name="path" default="/home/umut/bag/" />
+    <arg name="file_1" default="gmapping_data" />
+
+    <param name="/use_sim_time" value="true" />
+
+    <!-- Load the wheelchair URDF model into the parameter server -->
+    <param name="robot_description" textfile="$(find wheel_chair)/urdf/wheel_chair.urdf" />
+
+    <!--node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />-->
+
+    <!--node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />-->
+
+    <!-- Gmapping -->
+    <node pkg="gmapping" type="slam_gmapping" name="turtlebot3_slam_gmapping" args="scan:=front_rp/track_filtered" output="screen">
+        <param name="base_frame" value="$(arg set_base_frame)" />
+        <param name="odom_frame" value="$(arg set_odom_frame)" />
+        <param name="map_frame" value="$(arg set_map_frame)" />
+        <rosparam command="load" file="$(find wheelchair)/params/gmapping_params.yaml" />
+    </node>
+
+    <!-- Rviz -->
+    <group if="$(arg open_rviz)">
+        <node name="rviz" pkg="rviz" type="rviz" required="true" args="-d $(find wheelchair)/rviz/wheelchair_rosbag.rviz" />
+    </group>
+
+</launch>    
